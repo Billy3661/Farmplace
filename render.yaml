@@ -30,7 +30,7 @@ services:
     preDeployCommand: python manage.py migrate && python manage.py seed_farmplace
     autoDeploy: true
 
-  - type: postgresql
-    name: farmplace-db
+databases:
+  - name: farmplace-db
     plan: free
     databaseName: farmplace
