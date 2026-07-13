@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Book {{ service.get_name_display }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container page-header-content">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'consultancy:list' %}">Consultancy</a></li>
+                <li class="breadcrumb-item active">Book</li>
+            </ol>
+        </nav>
+        <h1>Book {{ service.get_name_display }}</h1>
+    </div>
+</div>
+
+<div class="container" style="padding-bottom:60px;max-width:640px;">
+    <div class="glass-card mt-4 reveal">
+        <h4 style="font-family:var(--font-heading);font-weight:700;margin-bottom:20px;">Consultation Booking</h4>
+
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            {% for field in form %}
+            <div class="mb-3">
+                <label for="{{ field.id_for_label }}" style="font-weight:600;font-size:0.92rem;margin-bottom:6px;display:block;">
+                    {{ field.label }}
+                </label>
+                {% if field.field.widget.input_type == 'select' %}
+                <select name="{{ field.html_name }}" id="{{ field.id_for_label }}" class="form-control" style="padding:12px 14px;border-radius:10px;border:1px solid #e0e0e0;width:100%;">
+                    {% for option in field.field.choices %}
+                    <option value="{{ option.0 }}" {% if field.value == option.0 %}selected{% endif %}>{{ option.1 }}</option>
+                    {% endfor %}
+                </select>
+                {% elif field.field.widget.input_type == 'checkbox' %}
+                <div class="form-check">
+                    {{ field }}
+                    <label class="form-check-label" for="{{ field.id_for_label }}">{{ field.help_text }}</label>
+                </div>
+                {% elif field.name == 'description' %}
+                <textarea name="{{ field.html_name }}" id="{{ field.id_for_label }}" class="form-control" rows="4" style="padding:12px 14px;border-radius:10px;border:1px solid #e0e0e0;width:100%;" placeholder="Describe your farming situation...">{{ field.value|default:'' }}</textarea>
+                {% elif field.field.widget.input_type == 'date' or field.field.widget.input_type == 'time' %}
+                <input type="{{ field.field.widget.input_type }}" name="{{ field.html_name }}" id="{{ field.id_for_label }}" value="{{ field.value|default:'' }}" class="form-control" style="padding:12px 14px;border-radius:10px;border:1px solid #e0e0e0;width:100%;">
+                {% else %}
+                <input type="{{ field.field.widget.input_type|default:'text' }}" name="{{ field.html_name }}" id="{{ field.id_for_label }}" value="{{ field.value|default:'' }}" class="form-control" style="padding:12px 14px;border-radius:10px;border:1px solid #e0e0e0;width:100%;">
+                {% endif %}
+                {% if field.errors %}
+                <div style="color:var(--fp-danger);font-size:0.85rem;margin-top:4px;">{{ field.errors.0 }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            {% if service.price %}
+            <div style="padding:16px;background:var(--fp-green-50);border-radius:10px;margin-bottom:20px;text-align:center;">
+                <span style="color:var(--fp-text-muted);font-size:0.9rem;">Consultation Fee:</span>
+                <span style="font-family:var(--font-heading);font-weight:700;font-size:1.2rem;color:var(--fp-green);margin-left:8px;">KES {{ service.price|floatformat:0 }}</span>
+            </div>
+            {% endif %}
+
+            <button type="submit" class="btn btn-primary w-100" style="padding:14px;">
+                <i class="bi bi-calendar-check me-2"></i>Book Consultation
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

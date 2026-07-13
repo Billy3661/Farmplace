@@ -149,8 +149,9 @@ img {
 .brand-text {
     font-family: var(--font-heading);
     font-weight: 800;
-    font-size: 1.4rem;
-    color: var(--fp-dark);
+    font-size: 1.5rem;
+    color: var(--fp-green);
+    white-space: nowrap;
 }
 
 .brand-highlight {
@@ -160,6 +161,7 @@ img {
 .navbar-brand {
     display: flex;
     align-items: center;
+    gap: 8px;
 }
 
 .nav-link {

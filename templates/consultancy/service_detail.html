@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ service.get_name_display }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container page-header-content">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'consultancy:list' %}">Consultancy</a></li>
+                <li class="breadcrumb-item active">{{ service.get_name_display }}</li>
+            </ol>
+        </nav>
+        <h1>{{ service.get_name_display }}</h1>
+        <p>{{ service.description|truncatewords:20 }}</p>
+    </div>
+</div>
+
+<div class="container" style="padding-bottom:60px;">
+    <div class="row g-4" style="margin-top:40px;">
+        <div class="col-lg-8">
+            <div class="glass-card reveal">
+                <div class="card-icon" style="font-size:2.5rem;background:var(--fp-green-50);margin-bottom:20px;">
+                    {% if service.icon %}
+                    <i class="bi bi-{{ service.icon }}"></i>
+                    {% else %}
+                    <i class="bi bi-clipboard2-pulse"></i>
+                    {% endif %}
+                </div>
+                <h3 style="font-family:var(--font-heading);font-weight:700;margin-bottom:16px;">
+                    {{ service.get_name_display }}
+                </h3>
+                <p style="color:var(--fp-text-muted);line-height:1.8;font-size:1.02rem;">{{ service.description }}</p>
+
+                <div class="d-flex flex-wrap gap-3 mt-4">
+                    {% if service.duration %}
+                    <span class="badge" style="background:var(--fp-green-50);color:var(--fp-green);padding:8px 16px;font-size:0.9rem;border-radius:8px;">
+                        <i class="bi bi-clock me-1"></i>{{ service.duration }}
+                    </span>
+                    {% endif %}
+                    {% if service.is_online %}
+                    <span class="badge" style="background:var(--fp-green-50);color:var(--fp-green);padding:8px 16px;font-size:0.9rem;border-radius:8px;">
+                        <i class="bi bi-laptop me-1"></i>Online Available
+                    </span>
+                    {% endif %}
+                    {% if service.is_in_person %}
+                    <span class="badge" style="background:var(--fp-gold-50);color:var(--fp-gold-dark);padding:8px 16px;font-size:0.9rem;border-radius:8px;">
+                        <i class="bi bi-person me-1"></i>In Person Available
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="glass-card reveal">
+                <h4 style="font-family:var(--font-heading);font-weight:700;margin-bottom:16px;">Booking Details</h4>
+
+                {% if service.price %}
+                <div style="text-align:center;padding:20px;background:var(--fp-green-50);border-radius:12px;margin-bottom:20px;">
+                    <div style="font-size:0.9rem;color:var(--fp-text-muted);margin-bottom:4px;">Consultation Fee</div>
+                    <div style="font-family:var(--font-heading);font-weight:800;font-size:1.8rem;color:var(--fp-green);">KES {{ service.price|floatformat:0 }}</div>
+                </div>
+                {% else %}
+                <div style="text-align:center;padding:20px;background:var(--fp-gold-50);border-radius:12px;margin-bottom:20px;">
+                    <div style="font-family:var(--font-heading);font-weight:700;color:var(--fp-gold-dark);font-size:1.1rem;">Contact for Pricing</div>
+                </div>
+                {% endif %}
+
+                {% if user.is_authenticated %}
+                <a href="{% url 'consultancy:book' pk=service.pk %}" class="btn btn-primary w-100" style="margin-bottom:12px;">
+                    <i class="bi bi-calendar-check me-2"></i>Book Consultation
+                </a>
+                {% else %}
+                <a href="{% url 'accounts:login' %}?next={{ request.path }}" class="btn btn-primary w-100" style="margin-bottom:12px;">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Login to Book
+                </a>
+                {% endif %}
+
+                <a href="https://wa.me/254799375946?text=Hi%2C%20I%20need%20{{ service.get_name_display|urlencode }}%20consultation" class="btn btn-outline-success w-100" target="_blank">
+                    <i class="bi bi-whatsapp me-2"></i>Chat on WhatsApp
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="glass-card mt-5 reveal" style="background:linear-gradient(135deg,var(--fp-green),var(--fp-green-light));color:white;text-align:center;">
+        <div style="position:relative;z-index:1;">
+            <h3 style="font-family:var(--font-heading);font-weight:800;margin-bottom:12px;">
+                Need a Custom Consultation?
+            </h3>
+            <p style="opacity:0.85;max-width:500px;margin:0 auto 24px;">
+                Every farm is unique. Contact us to discuss your specific needs.
+            </p>
+            <a href="{% url 'contact:contact' %}" class="btn btn-gold">
+                <i class="bi bi-envelope me-2"></i>Get in Touch
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
