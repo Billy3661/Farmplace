@@ -1662,7 +1662,7 @@ img {
 /* Tablet & below */
 @media (max-width: 991.98px) {
     .brand-logo {
-        height: 40px;
+        height: 45px;
     }
 
     .navbar-toggler {
@@ -1760,7 +1760,7 @@ img {
 
 @media (max-width: 575.98px) {
     .brand-logo {
-        height: 35px;
+        height: 42px;
     }
 
     .hero-stats {
