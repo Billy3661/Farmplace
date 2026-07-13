@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Membership Plans{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container page-header-content">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item active">Membership</li>
+            </ol>
+        </nav>
+        <h1>Membership Plans</h1>
+        <p>Join the FarmPlace community. Unlock premium resources and mentorship.</p>
+    </div>
+</div>
+
+<div class="container" style="padding-bottom:60px;">
+    <div class="section-header reveal" style="margin-top:40px;">
+        <span class="section-label">Choose Your Plan</span>
+        <h2 class="section-title" style="font-size:1.8rem;">Invest in Your Farming Future</h2>
+        <p class="section-subtitle">Every plan includes access to our WhatsApp community and monthly live sessions.</p>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+        {% for plan in plans %}
+        <div class="col-md-6 col-lg-4 reveal reveal-delay-{{ forloop.counter }}">
+            <div class="pricing-card h-100 {% if plan.is_featured %}featured{% endif %}">
+                {% if plan.is_featured %}
+                <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--fp-green);color:white;padding:4px 20px;border-radius:20px;font-size:0.78rem;font-weight:700;text-transform:uppercase;">
+                    Best Value
+                </div>
+                {% endif %}
+
+                <div style="margin-bottom:20px;">
+                    {% if plan.icon %}
+                    <div style="font-size:2.5rem;margin-bottom:12px;">{{ plan.icon }}</div>
+                    {% else %}
+                    <div class="card-icon mx-auto">
+                        {% if forloop.counter == 1 %}
+                        <i class="bi bi-star"></i>
+                        {% elif forloop.counter == 2 %}
+                        <i class="bi bi-star-fill"></i>
+                        {% else %}
+                        <i class="bi bi-trophy"></i>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+
+                    <h3 style="font-family:var(--font-heading);font-weight:800;font-size:1.3rem;">{{ plan.name }}</h3>
+                </div>
+
+                <div class="pricing-amount">
+                    <span class="currency">KES</span>{{ plan.price }}
+                    <span class="period">/{{ plan.get_duration_display }}</span>
+                </div>
+
+                {% if plan.description %}
+                <p style="color:var(--fp-text-muted);font-size:0.92rem;">{{ plan.description }}</p>
+                {% endif %}
+
+                <ul class="pricing-features">
+                    <li><i class="bi bi-check-circle-fill"></i> WhatsApp Community Access</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Monthly Live Sessions</li>
+                    {% if plan.includes_courses %}
+                    <li><i class="bi bi-check-circle-fill"></i> Access to All Courses</li>
+                    {% endif %}
+                    {% if plan.includes_ebooks %}
+                    <li><i class="bi bi-check-circle-fill"></i> Premium eBook Library</li>
+                    {% endif %}
+                    {% if plan.includes_mentorship %}
+                    <li><i class="bi bi-check-circle-fill"></i> 1-on-1 Mentorship</li>
+                    {% endif %}
+                    {% if plan.includes_farm_visit %}
+                    <li><i class="bi bi-check-circle-fill"></i> Annual Farm Visit</li>
+                    {% endif %}
+                </ul>
+
+                {% if user_membership and user_membership.plan == plan and user_membership.is_active %}
+                <a href="{% url 'membership:status' %}" class="btn btn-outline-primary w-100">
+                    <i class="bi bi-check-circle me-2"></i>Current Plan
+                </a>
+                {% else %}
+                <form method="post" action="{% url 'membership:subscribe' plan_slug=plan.slug %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn {% if plan.is_featured %}btn-primary{% else %}btn-gold{% endif %} w-100">
+                        <i class="bi bi-star me-2"></i>Get {{ plan.name }}
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="empty-state">
+                <div class="empty-state-icon"><i class="bi bi-inbox"></i></div>
+                <h3>Plans coming soon</h3>
+                <p>We are preparing exciting membership options for you.</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="glass-card mt-5 reveal" style="text-align:center;background:linear-gradient(135deg,var(--fp-green-50),var(--fp-gold-50));">
+        <h4 style="font-family:var(--font-heading);font-weight:700;color:var(--fp-green);margin-bottom:12px;">
+            <i class="bi bi-question-circle me-2"></i>Questions About Membership?
+        </h4>
+        <p style="color:var(--fp-text-muted);max-width:500px;margin:0 auto 20px;">
+            Our team is happy to help you choose the right plan for your farming goals.
+        </p>
+        <a href="{% url 'contact:contact' %}" class="btn btn-primary">
+            <i class="bi bi-chat-dots me-2"></i>Contact Us
+        </a>
+    </div>
+</div>
+{% endblock %}

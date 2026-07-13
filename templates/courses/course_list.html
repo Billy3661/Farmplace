@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}Courses{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container page-header-content">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item active">Courses</li>
+            </ol>
+        </nav>
+        <h1>Short Courses</h1>
+        <p>Learn on your phone. Apply on your farm.</p>
+    </div>
+</div>
+
+<div class="container" style="padding-bottom:60px;">
+    <!-- Filter Bar -->
+    <div class="filter-bar" style="margin-top:30px;">
+        <form method="get" class="d-flex gap-3 flex-wrap align-items-center">
+            <div class="flex-grow-1">
+                <input type="text" name="q" class="form-control" placeholder="Search courses..." value="{{ search_query }}">
+            </div>
+            <select name="category" class="form-control" style="width:auto;" onchange="this.form.submit()">
+                <option value="">All Categories</option>
+                {% for cat in categories %}
+                <option value="{{ cat.slug }}" {% if selected_category == cat.slug %}selected{% endif %}>
+                    {{ cat.name }} ({{ cat.course_count }})
+                </option>
+                {% endfor %}
+            </select>
+            <select name="level" class="form-control" style="width:auto;" onchange="this.form.submit()">
+                <option value="">All Levels</option>
+                <option value="beginner" {% if selected_level == 'beginner' %}selected{% endif %}>Beginner</option>
+                <option value="intermediate" {% if selected_level == 'intermediate' %}selected{% endif %}>Intermediate</option>
+                <option value="advanced" {% if selected_level == 'advanced' %}selected{% endif %}>Advanced</option>
+            </select>
+            <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
+        </form>
+    </div>
+
+    <!-- Course Grid -->
+    <div class="row g-4">
+        {% for course in courses %}
+        <div class="col-md-6 col-lg-4">
+            <div class="course-card">
+                <div class="course-card-image" style="background:linear-gradient(135deg,var(--fp-green),var(--fp-green-light));">
+                    {% if course.image %}
+                    <img src="{{ course.image.url }}" alt="{{ course.title }}">
+                    {% else %}
+                    <div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:3rem;color:rgba(255,255,255,0.3);">
+                        <i class="bi bi-mortarboard"></i>
+                    </div>
+                    {% endif %}
+                    {% if course.has_discount %}
+                    <span class="course-card-badge" style="background:var(--fp-orange);">Sale</span>
+                    {% endif %}
+                    <span class="course-card-price">KES {{ course.price }}</span>
+                </div>
+                <div class="course-card-body">
+                    <span class="course-card-category">{{ course.category.name }}</span>
+                    <h3 class="course-card-title">
+                        <a href="{{ course.get_absolute_url }}">{{ course.title }}</a>
+                    </h3>
+                    <div class="course-card-meta">
+                        <span><i class="bi bi-clock"></i>{{ course.duration|default:"4 weeks" }}</span>
+                        <span><i class="bi bi-bar-chart"></i>{{ course.get_level_display }}</span>
+                        <span><i class="bi bi-people"></i>{{ course.enrollment_count }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="empty-state">
+                <div class="empty-state-icon"><i class="bi bi-inbox"></i></div>
+                <h3>No courses found</h3>
+                <p>Try adjusting your search or filter criteria.</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

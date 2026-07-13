@@ -1,0 +1,461 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<!-- ==================== HERO ==================== -->
+<section class="hero-section">
+    <!-- Floating Farm Icons -->
+    <div class="hero-particles">
+        <span class="hero-particle" style="top:10%;left:5%;animation-delay:0s;">&#127807;</span>
+        <span class="hero-particle" style="top:20%;left:85%;animation-delay:2s;">&#127805;</span>
+        <span class="hero-particle" style="top:60%;left:10%;animation-delay:4s;">&#128037;</span>
+        <span class="hero-particle" style="top:70%;left:75%;animation-delay:1s;">&#127808;</span>
+        <span class="hero-particle" style="top:40%;left:90%;animation-delay:3s;">&#128038;</span>
+        <span class="hero-particle" style="top:80%;left:40%;animation-delay:5s;">&#129382;</span>
+        <span class="hero-particle" style="top:15%;left:50%;animation-delay:6s;">&#127793;</span>
+        <span class="hero-particle" style="top:50%;left:30%;animation-delay:2.5s;">&#128039;</span>
+    </div>
+
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <div class="hero-content">
+                    <div class="hero-badge">
+                        <i class="bi bi-lightning-charge-fill"></i>
+                        Transforming African Agriculture
+                    </div>
+
+                    <h1 class="hero-title">
+                        Learn Today.<br>
+                        <span class="highlight">Apply Tomorrow.</span><br>
+                        Profit for Years.
+                    </h1>
+
+                    <p class="hero-subtitle">
+                        We help farmers make profitable decisions through practical training,
+                        digital learning resources, consultancy services, and mentorship.
+                    </p>
+
+                    <p class="hero-quote">
+                        <i class="bi bi-quote"></i>
+                        Your smartphone is your most profitable classroom.
+                    </p>
+
+                    <div class="hero-buttons">
+                        <a href="{% url 'courses:course_list' %}" class="btn btn-gold btn-hero">
+                            <i class="bi bi-play-circle me-2"></i>Start Learning
+                        </a>
+                        <a href="{% url 'ebooks:ebook_list' %}" class="btn btn-outline-light btn-hero">
+                            <i class="bi bi-book me-2"></i>Browse eBooks
+                        </a>
+                    </div>
+
+                    <div class="hero-stats">
+                        <div class="hero-stat">
+                            <span class="hero-stat-number counter" data-target="5000" data-suffix="+">0</span>
+                            <span class="hero-stat-label">Farmers Trained</span>
+                        </div>
+                        <div class="hero-stat">
+                            <span class="hero-stat-number counter" data-target="12" data-suffix="+">0</span>
+                            <span class="hero-stat-label">Online Courses</span>
+                        </div>
+                        <div class="hero-stat">
+                            <span class="hero-stat-number counter" data-target="50" data-suffix="+">0</span>
+                            <span class="hero-stat-label">eBooks Available</span>
+                        </div>
+                        <div class="hero-stat">
+                            <span class="hero-stat-number counter" data-target="98" data-suffix="%">0</span>
+                            <span class="hero-stat-label">Success Rate</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 d-none d-lg-block text-center">
+                <div class="hero-visual" style="position:relative;z-index:2;">
+                    <div style="font-size:12rem;opacity:0.15;filter:drop-shadow(0 0 40px rgba(255,255,255,0.2));">&#127807;</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== WHY CHOOSE US ==================== -->
+<section class="section" style="background:var(--fp-cream);">
+    <div class="container">
+        <div class="section-header reveal">
+            <span class="section-label">Why Farmplace</span>
+            <h2 class="section-title">Why Farmers Choose Farmplace</h2>
+            <p class="section-subtitle">Every profitable farm begins with one good decision.</p>
+        </div>
+
+        <div class="why-us-grid reveal">
+            <div class="why-us-item">
+                <div class="why-us-icon"><i class="bi bi-laptop"></i></div>
+                <span class="why-us-text">Practical online short courses</span>
+            </div>
+            <div class="why-us-item">
+                <div class="why-us-icon"><i class="bi bi-book-half"></i></div>
+                <span class="why-us-text">Professional farming eBooks</span>
+            </div>
+            <div class="why-us-item">
+                <div class="why-us-icon"><i class="bi bi-chat-dots"></i></div>
+                <span class="why-us-text">WhatsApp mentorship</span>
+            </div>
+            <div class="why-us-item">
+                <div class="why-us-icon"><i class="bi bi-clipboard-check"></i></div>
+                <span class="why-us-text">Farm consultancy</span>
+            </div>
+            <div class="why-us-item">
+                <div class="why-us-icon"><i class="bi bi-hearts"></i></div>
+                <span class="why-us-text">AB Chicks supply</span>
+            </div>
+            <div class="why-us-item">
+                <div class="why-us-icon"><i class="bi bi-gear"></i></div>
+                <span class="why-us-text">Modern farming solutions</span>
+            </div>
+            <div class="why-us-item">
+                <div class="why-us-icon"><i class="bi bi-list-check"></i></div>
+                <span class="why-us-text">Step-by-step learning</span>
+            </div>
+            <div class="why-us-item">
+                <div class="why-us-icon"><i class="bi bi-people"></i></div>
+                <span class="why-us-text">Community of committed farmers</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== KENTE DIVIDER ==================== -->
+<div class="kente-divider"></div>
+
+<!-- ==================== SHORT COURSES ==================== -->
+<section class="section">
+    <div class="container">
+        <div class="section-header reveal">
+            <span class="section-label">Learn From Anywhere</span>
+            <h2 class="section-title">Our Short Courses</h2>
+            <p class="section-subtitle">Choose your course. Register online. Learn on your phone. Apply on your farm.</p>
+        </div>
+
+        <div class="row g-4">
+            {% for course in featured_courses %}
+            <div class="col-md-4 reveal reveal-delay-{{ forloop.counter }}">
+                <div class="course-card">
+                    <div class="course-card-image" style="background:linear-gradient(135deg,var(--fp-green),var(--fp-green-light));">
+                        {% if course.image %}
+                        <img src="{{ course.image.url }}" alt="{{ course.title }}">
+                        {% else %}
+                        <div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:4rem;color:rgba(255,255,255,0.3);">
+                            <i class="bi bi-mortarboard"></i>
+                        </div>
+                        {% endif %}
+                        {% if course.has_discount %}
+                        <span class="course-card-badge" style="background:var(--fp-orange);">Sale</span>
+                        {% endif %}
+                        <span class="course-card-price">KES {{ course.price }}</span>
+                    </div>
+                    <div class="course-card-body">
+                        <span class="course-card-category">{{ course.category.name }}</span>
+                        <h3 class="course-card-title">{{ course.title }}</h3>
+                        <div class="course-card-meta">
+                            <span><i class="bi bi-clock"></i>{{ course.duration|default:"4 weeks" }}</span>
+                            <span><i class="bi bi-bar-chart"></i>{{ course.get_level_display }}</span>
+                            <span><i class="bi bi-people"></i>{{ course.enrollment_count }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-md-4 reveal reveal-delay-1">
+                <div class="glass-card text-center">
+                    <div class="card-icon mx-auto" style="font-size:2.5rem;background:var(--fp-green-50);">&#128037;</div>
+                    <h5 class="card-title">Poultry Farming</h5>
+                    <p class="card-text">Comprehensive poultry training from brooding to marketing.</p>
+                    <a href="{% url 'courses:course_list' %}" class="btn btn-outline-primary btn-sm mt-2">View Course</a>
+                </div>
+            </div>
+            <div class="col-md-4 reveal reveal-delay-2">
+                <div class="glass-card text-center">
+                    <div class="card-icon mx-auto" style="font-size:2.5rem;background:var(--fp-green-50);">&#128055;</div>
+                    <h5 class="card-title">Pig Farming</h5>
+                    <p class="card-text">Learn modern pig farming from housing to market.</p>
+                    <a href="{% url 'courses:course_list' %}" class="btn btn-outline-primary btn-sm mt-2">View Course</a>
+                </div>
+            </div>
+            <div class="col-md-4 reveal reveal-delay-3">
+                <div class="glass-card text-center">
+                    <div class="card-icon mx-auto" style="font-size:2.5rem;background:var(--fp-green-50);">&#128007;</div>
+                    <h5 class="card-title">Rabbit Farming</h5>
+                    <p class="card-text">Start and grow a profitable rabbit farm.</p>
+                    <a href="{% url 'courses:course_list' %}" class="btn btn-outline-primary btn-sm mt-2">View Course</a>
+                </div>
+            </div>
+            <div class="col-md-4 reveal reveal-delay-1">
+                <div class="glass-card text-center">
+                    <div class="card-icon mx-auto" style="font-size:2.5rem;background:var(--fp-green-50);">&#128021;</div>
+                    <h5 class="card-title">Goat & Sheep Farming</h5>
+                    <p class="card-text">Master small ruminant management for profit.</p>
+                    <a href="{% url 'courses:course_list' %}" class="btn btn-outline-primary btn-sm mt-2">View Course</a>
+                </div>
+            </div>
+            <div class="col-md-4 reveal reveal-delay-2">
+                <div class="glass-card text-center">
+                    <div class="card-icon mx-auto" style="font-size:2.5rem;background:var(--fp-green-50);">&#129402;</div>
+                    <h5 class="card-title">Dairy & Beef Farming</h5>
+                    <p class="card-text">Modern cattle management and milk production.</p>
+                    <a href="{% url 'courses:course_list' %}" class="btn btn-outline-primary btn-sm mt-2">View Course</a>
+                </div>
+            </div>
+            <div class="col-md-4 reveal reveal-delay-3">
+                <div class="glass-card text-center">
+                    <div class="card-icon mx-auto" style="font-size:2.5rem;background:var(--fp-green-50);">&#127807;</div>
+                    <h5 class="card-title">Crop Farming</h5>
+                    <p class="card-text">Onion, vegetable, and organic farming guides.</p>
+                    <a href="{% url 'courses:course_list' %}" class="btn btn-outline-primary btn-sm mt-2">View Course</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-5 reveal">
+            <a href="{% url 'courses:course_list' %}" class="btn btn-primary">
+                <i class="bi bi-grid me-2"></i>View All Courses
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== STATS COUNTER ==================== -->
+<section class="section stats-section">
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-item reveal">
+                <span class="stat-number counter" data-target="5000" data-suffix="+">0</span>
+                <span class="stat-label">Farmers Trained</span>
+            </div>
+            <div class="stat-item reveal reveal-delay-1">
+                <span class="stat-number counter" data-target="12" data-suffix="">0</span>
+                <span class="stat-label">Course Categories</span>
+            </div>
+            <div class="stat-item reveal reveal-delay-2">
+                <span class="stat-number counter" data-target="50" data-suffix="+">0</span>
+                <span class="stat-label">eBooks Published</span>
+            </div>
+            <div class="stat-item reveal reveal-delay-3">
+                <span class="stat-number counter" data-target="1000" data-suffix="+">0</span>
+                <span class="stat-label">Chicks Delivered</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== AB CHICKS ==================== -->
+<section class="section" style="background:var(--fp-cream);">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6 reveal">
+                <span class="section-label">Healthy Chicks. Better Farmers.</span>
+                <h2 class="section-title" style="text-align:left;">AB Chicks Supply</h2>
+                <p style="color:var(--fp-text-muted);margin-bottom:30px;">
+                    We supply quality day-old to 1-month-old chicks. Every purchase comes with
+                    brooding guidance, vaccination schedules, and after-sale support.
+                </p>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-6">
+                        <div class="glass-card p-4 text-center">
+                            <div style="font-size:2rem;margin-bottom:8px;">&#128037;</div>
+                            <h6 style="font-weight:700;margin-bottom:4px;">Kenbro</h6>
+                            <small style="color:var(--fp-text-muted);">Hardy dual-purpose breed</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="glass-card p-4 text-center">
+                            <div style="font-size:2rem;margin-bottom:8px;">&#128037;</div>
+                            <h6 style="font-weight:700;margin-bottom:4px;">Sasso</h6>
+                            <small style="color:var(--fp-text-muted);">Indigenous improved breed</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="glass-card p-4 text-center">
+                            <div style="font-size:2rem;margin-bottom:8px;">&#128037;</div>
+                            <h6 style="font-weight:700;margin-bottom:4px;">Sussex</h6>
+                            <small style="color:var(--fp-text-muted);">Excellent layers</small>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="{% url 'chicks:catalog' %}" class="btn btn-primary">
+                    <i class="bi bi-cart me-2"></i>Order Chicks
+                </a>
+            </div>
+            <div class="col-lg-6 reveal reveal-delay-2">
+                <div class="glass-card p-5 text-center" style="background:linear-gradient(135deg,var(--fp-green-50),var(--fp-gold-50));">
+                    <div style="font-size:8rem;opacity:0.2;">&#128037;</div>
+                    <h4 style="font-weight:700;color:var(--fp-green);">Available Ages</h4>
+                    <div class="d-flex flex-wrap justify-content-center gap-2 mt-3">
+                        <span class="badge-course badge-green">Day-old</span>
+                        <span class="badge-course badge-green">1 Week</span>
+                        <span class="badge-course badge-green">2 Weeks</span>
+                        <span class="badge-course badge-green">3 Weeks</span>
+                        <span class="badge-course badge-green">1 Month</span>
+                    </div>
+                    <p style="margin-top:20px;color:var(--fp-text-muted);font-size:0.9rem;">
+                        Book online. Receive brooding guidance.<br>
+                        Get vaccination schedule. After-sale support.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== TESTIMONIALS ==================== -->
+<section class="section">
+    <div class="container">
+        <div class="section-header reveal">
+            <span class="section-label">Success Stories</span>
+            <h2 class="section-title">Real Farmers. Real Results.</h2>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4 reveal">
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                    </div>
+                    <p class="testimonial-quote">
+                        Before Farmplace I was losing chicks every cycle.
+                        Today my mortality is below 3%.
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">M</div>
+                        <div>
+                            <div class="testimonial-name">Mary</div>
+                            <div class="testimonial-location">Nakuru</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 reveal reveal-delay-1">
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                    </div>
+                    <p class="testimonial-quote">
+                        I started with 5 rabbits. Today I supply breeding stock.
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">J</div>
+                        <div>
+                            <div class="testimonial-name">James</div>
+                            <div class="testimonial-location">Eldoret</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 reveal reveal-delay-2">
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                    </div>
+                    <p class="testimonial-quote">
+                        I learnt poultry marketing before stocking. My birds were sold
+                        before they reached market age.
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">P</div>
+                        <div>
+                            <div class="testimonial-name">Peter</div>
+                            <div class="testimonial-location">Kiambu</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== CONSULTANCY ==================== -->
+<section class="section" style="background:var(--fp-cream);">
+    <div class="container">
+        <div class="section-header reveal">
+            <span class="section-label">We Walk With Farmers</span>
+            <h2 class="section-title">Consultancy Services</h2>
+            <p class="section-subtitle">Professional guidance for every stage of your farming journey.</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4 col-lg-3 reveal">
+                <div class="glass-card text-center h-100">
+                    <div class="card-icon mx-auto"><i class="bi bi-clipboard2-pulse"></i></div>
+                    <h5 class="card-title">Poultry Consultancy</h5>
+                    <p class="card-text">Expert poultry management advice.</p>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-3 reveal reveal-delay-1">
+                <div class="glass-card text-center h-100">
+                    <div class="card-icon mx-auto"><i class="bi bi-house-gear"></i></div>
+                    <h5 class="card-title">Piggery Setup</h5>
+                    <p class="card-text">Complete pig farm setup guidance.</p>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-3 reveal reveal-delay-2">
+                <div class="glass-card text-center h-100">
+                    <div class="card-icon mx-auto"><i class="bi bi-bullseye"></i></div>
+                    <h5 class="card-title">Farm Business Planning</h5>
+                    <p class="card-text">Turn your farm into a real business.</p>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-3 reveal reveal-delay-3">
+                <div class="glass-card text-center h-100">
+                    <div class="card-icon mx-auto"><i class="bi bi-shield-check"></i></div>
+                    <h5 class="card-title">Biosecurity Planning</h5>
+                    <p class="card-text">Protect your farm from disease.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-5 reveal">
+            <a href="{% url 'consultancy:list' %}" class="btn btn-primary">
+                <i class="bi bi-calendar-check me-2"></i>Book Consultation
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== CTA ==================== -->
+<section class="section cta-section">
+    <div class="container position-relative" style="z-index:1;">
+        <div class="reveal">
+            <h2 class="cta-title">Ready to Transform Your Farm?</h2>
+            <p class="cta-text">
+                Join thousands of smart farmers who are learning, applying, and profiting.
+                Your journey starts with one click.
+            </p>
+            <div class="d-flex gap-3 justify-content-center flex-wrap">
+                <a href="{% url 'accounts:register' %}" class="btn btn-primary btn-hero">
+                    <i class="bi bi-person-plus me-2"></i>Register Free
+                </a>
+                <a href="{% url 'membership:plans' %}" class="btn btn-outline-dark btn-hero">
+                    <i class="bi bi-star me-2"></i>View Membership
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

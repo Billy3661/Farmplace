@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Learn: {{ course.title }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container page-header-content">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'courses:course_list' %}">Courses</a></li>
+                <li class="breadcrumb-item"><a href="{{ course.get_absolute_url }}">{{ course.title }}</a></li>
+                <li class="breadcrumb-item active">Learn</li>
+            </ol>
+        </nav>
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+            <div>
+                <h1 style="font-size:1.8rem;">{{ course.title }}</h1>
+                <p class="mb-0">
+                    <span style="color:rgba(255,255,255,0.7);">
+                        <i class="bi bi-bar-chart me-1"></i>{{ course.get_level_display }}
+                    </span>
+                    <span class="mx-2" style="color:rgba(255,255,255,0.3);">|</span>
+                    <span style="color:rgba(255,255,255,0.7);">
+                        {{ enrollment.progress }}% complete
+                    </span>
+                </p>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <div style="width:180px;">
+                    <div class="progress" style="height:8px;border-radius:4px;">
+                        <div class="progress-bar" style="width:{{ enrollment.progress }}%;background:var(--fp-gold);"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container" style="padding:30px 0 60px;">
+    <div class="row g-4">
+        <div class="col-lg-4">
+            <div class="learn-sidebar">
+                <div style="padding:20px;border-bottom:1px solid rgba(0,0,0,0.06);">
+                    <h6 style="font-family:var(--font-heading);font-weight:700;margin:0;">
+                        <i class="bi bi-list-ul me-2" style="color:var(--fp-green);"></i>Course Content
+                    </h6>
+                    <small style="color:var(--fp-text-muted);">
+                        {{ modules|length }} modules &middot; {{ enrollment.progress }}% complete
+                    </small>
+                </div>
+                {% for module in modules %}
+                <div>
+                    <div class="module-header" data-bs-toggle="collapse" data-bs-target="#module-{{ module.id }}" aria-expanded="true">
+                        <span>
+                            <i class="bi bi-folder2-open me-2" style="color:var(--fp-green);font-size:0.85rem;"></i>
+                            {{ module.title }}
+                        </span>
+                        <span style="font-size:0.8rem;color:var(--fp-text-muted);">
+                            {{ module.lesson_count }} lessons
+                        </span>
+                    </div>
+                    <div id="module-{{ module.id }}" class="collapse show">
+                        {% for lesson in module.lessons.all %}
+                        <a href="?lesson={{ lesson.id }}"
+                           class="lesson-item {% if current_lesson and current_lesson.id == lesson.id %}active{% endif %} {% if lesson.id in completed_lessons %}completed{% endif %}">
+                            <span class="lesson-check">
+                                {% if lesson.id in completed_lessons %}
+                                <i class="bi bi-check"></i>
+                                {% else %}
+                                <i class="bi bi-play-fill"></i>
+                                {% endif %}
+                            </span>
+                            <span>{{ lesson.title }}</span>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            {% if current_lesson %}
+            <div class="glass-card mb-4">
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                    <div>
+                        <span class="badge-course badge-green mb-2">{{ current_lesson.module.title }}</span>
+                        <h3 style="font-family:var(--font-heading);font-weight:700;margin:0;">
+                            {{ current_lesson.title }}
+                        </h3>
+                    </div>
+                    {% if current_lesson.id in completed_lessons %}
+                    <span class="badge-course badge-green"><i class="bi bi-check-circle me-1"></i>Completed</span>
+                    {% endif %}
+                </div>
+
+                {% if current_lesson.content %}
+                <div style="color:var(--fp-text);line-height:1.9;font-size:0.95rem;">
+                    {{ current_lesson.content|safe }}
+                </div>
+                {% else %}
+                <div class="text-center py-5">
+                    <div style="font-size:4rem;color:var(--fp-green-200);margin-bottom:16px;">
+                        <i class="bi bi-play-circle"></i>
+                    </div>
+                    <p style="color:var(--fp-text-muted);">Lesson content will appear here.</p>
+                </div>
+                {% endif %}
+
+                {% if current_lesson.video_url %}
+                <div class="mt-4">
+                    <div class="ratio ratio-16x9 rounded overflow-hidden">
+                        <iframe src="{{ current_lesson.video_url }}" title="{{ current_lesson.title }}" allowfullscreen></iframe>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if current_lesson.download_file %}
+                <div class="mt-4">
+                    <a href="{{ current_lesson.download_file.url }}" class="btn btn-outline-primary btn-sm" target="_blank">
+                        <i class="bi bi-download me-2"></i>Download Resource
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center">
+                {% if current_lesson.id not in completed_lessons %}
+                <form method="post" action="{% url 'courses:complete_lesson' slug=course.slug lesson_id=current_lesson.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-circle me-2"></i>Mark as Complete
+                    </button>
+                </form>
+                {% else %}
+                <div></div>
+                {% endif %}
+
+                {% with next_lesson_id=None %}
+                {% for module in modules %}
+                    {% for lesson in module.lessons.all %}
+                        {% if lesson.id == current_lesson.id %}
+                            {% with next_found=False %}
+                            {% endwith %}
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+                {% endwith %}
+
+                <div class="d-flex gap-2">
+                    {% with prev_id=None %}
+                    {% for module in modules %}
+                        {% for lesson in module.lessons.all %}
+                            {% if lesson.id in completed_lessons and lesson.id != current_lesson.id %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                    {% endwith %}
+                </div>
+            </div>
+            {% else %}
+            <div class="glass-card text-center py-5">
+                <div style="font-size:4rem;color:var(--fp-green-200);margin-bottom:20px;">
+                    <i class="bi bi-mortarboard"></i>
+                </div>
+                <h3 style="font-family:var(--font-heading);">Start Learning</h3>
+                <p style="color:var(--fp-text-muted);max-width:400px;margin:12px auto 24px;">
+                    Select a lesson from the sidebar to begin your learning journey.
+                </p>
+                {% if modules and modules.first.lessons.exists %}
+                <a href="?lesson={{ modules.first.lessons.first.id }}" class="btn btn-primary">
+                    <i class="bi bi-play-fill me-2"></i>Start First Lesson
+                </a>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            {% if enrollment.progress == 100 %}
+            <div class="glass-card mt-4 text-center" style="border:2px solid var(--fp-green);background:var(--fp-green-50);">
+                <div style="font-size:3rem;margin-bottom:12px;">🎓</div>
+                <h4 style="font-family:var(--font-heading);font-weight:700;color:var(--fp-green);">
+                    Congratulations!
+                </h4>
+                <p style="color:var(--fp-text-muted);">
+                    You have completed all lessons in this course. Your certificate is ready!
+                </p>
+                <a href="#" class="btn btn-gold">
+                    <i class="bi bi-award me-2"></i>Download Certificate
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

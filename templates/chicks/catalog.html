@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}AB Chicks Catalog{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container page-header-content">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item active">AB Chicks</li>
+            </ol>
+        </nav>
+        <h1>AB Chicks Supply</h1>
+        <p>Quality day-old to 1-month-old chicks with brooding guidance and after-sale support.</p>
+    </div>
+</div>
+
+<div class="container" style="padding-bottom:60px;">
+    <div class="section-header reveal" style="margin-top:40px;">
+        <span class="section-label">Our Breeds</span>
+        <h2 class="section-title" style="font-size:1.8rem;">Chick Types Available</h2>
+        <p class="section-subtitle">We offer a variety of hardy, productive breeds suited for Kenyan conditions.</p>
+    </div>
+
+    <div class="row g-4 mb-5">
+        {% for chick in chick_types %}
+        <div class="col-md-6 col-lg-4 reveal reveal-delay-{{ forloop.counter }}">
+            <div class="glass-card h-100 text-center">
+                <div class="card-icon mx-auto" style="font-size:2.5rem;background:var(--fp-gold-50);">
+                    &#128037;
+                </div>
+                <h4 style="font-family:var(--font-heading);font-weight:700;color:var(--fp-green);">{{ chick.name }}</h4>
+                <p style="color:var(--fp-text-muted);font-size:0.92rem;line-height:1.7;">
+                    {{ chick.description|default:"Quality breed for profitable farming." }}
+                </p>
+                {% if chick.characteristics %}
+                <div class="d-flex flex-wrap justify-content-center gap-2 mb-3">
+                    {% for char in chick.characteristics %}
+                    <span class="badge-course badge-green">{{ char }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <div style="font-family:var(--font-heading);font-weight:700;font-size:1.3rem;color:var(--fp-gold);margin-top:auto;">
+                    KES {{ chick.price_per_bird }}/bird
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="empty-state">
+                <div class="empty-state-icon"><i class="bi bi-inbox"></i></div>
+                <h3>Chick types coming soon</h3>
+                <p>Check back soon for available breeds.</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="kente-divider-thin"></div>
+
+    <div class="section-header reveal">
+        <span class="section-label">Available Now</span>
+        <h2 class="section-title" style="font-size:1.8rem;">Current Batches</h2>
+        <p class="section-subtitle">Order from our available batches. Brooding guidance and vaccination schedules included.</p>
+    </div>
+
+    <div class="row g-4">
+        {% for batch in available_batches %}
+        <div class="col-md-6 col-lg-4 reveal reveal-delay-{{ forloop.counter }}">
+            <div class="course-card h-100">
+                <div class="course-card-body">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <span class="badge-course badge-green">{{ batch.chick_type.name }}</span>
+                        <span class="badge-course badge-gold">{{ batch.get_age_display }}</span>
+                    </div>
+                    <h4 style="font-family:var(--font-heading);font-weight:700;font-size:1.1rem;margin-bottom:12px;">
+                        {{ batch.chick_type.name }} - {{ batch.get_age_display }}
+                    </h4>
+                    <ul style="list-style:none;padding:0;margin-bottom:20px;">
+                        <li style="padding:6px 0;font-size:0.88rem;display:flex;gap:8px;">
+                            <i class="bi bi-check-circle" style="color:var(--fp-green);"></i>
+                            <span>Age: {{ batch.get_age_display }}</span>
+                        </li>
+                        <li style="padding:6px 0;font-size:0.88rem;display:flex;gap:8px;">
+                            <i class="bi bi-check-circle" style="color:var(--fp-green);"></i>
+                            <span>Available: {{ batch.quantity_available }} birds</span>
+                        </li>
+                        <li style="padding:6px 0;font-size:0.88rem;display:flex;gap:8px;">
+                            <i class="bi bi-check-circle" style="color:var(--fp-green);"></i>
+                            <span>Price: KES {{ batch.price_per_bird }}/bird</span>
+                        </li>
+                        {% if batch.delivery_available %}
+                        <li style="padding:6px 0;font-size:0.88rem;display:flex;gap:8px;">
+                            <i class="bi bi-check-circle" style="color:var(--fp-green);"></i>
+                            <span>Delivery available</span>
+                        </li>
+                        {% endif %}
+                    </ul>
+                    <a href="{% url 'chicks:order_chicks' batch_id=batch.id %}" class="btn btn-gold w-100">
+                        <i class="bi bi-cart-plus me-2"></i>Order Now
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="glass-card text-center py-5 reveal">
+                <div style="font-size:4rem;margin-bottom:16px;">&#128037;</div>
+                <h3 style="font-family:var(--font-heading);">No batches available right now</h3>
+                <p style="color:var(--fp-text-muted);max-width:400px;margin:12px auto 24px;">
+                    New batches are added regularly. Check back soon or contact us to pre-order.
+                </p>
+                <a href="{% url 'contact:contact' %}" class="btn btn-primary">
+                    <i class="bi bi-chat-dots me-2"></i>Contact Us
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="glass-card mt-5 reveal" style="background:linear-gradient(135deg,var(--fp-green-50),var(--fp-gold-50));">
+        <div class="row align-items-center g-4">
+            <div class="col-md-8">
+                <h4 style="font-family:var(--font-heading);font-weight:700;color:var(--fp-green);margin-bottom:8px;">
+                    <i class="bi bi-shield-check me-2"></i>What's Included with Every Order
+                </h4>
+                <p style="color:var(--fp-text-muted);margin:0;">
+                    Free brooding guidance, vaccination schedule, feed recommendations, and after-sale WhatsApp support.
+                </p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a href="{% url 'contact:contact' %}" class="btn btn-primary">
+                    <i class="bi bi-question-circle me-2"></i>Ask a Question
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

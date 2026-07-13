@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Consultancy Services{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container page-header-content">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item active">Consultancy</li>
+            </ol>
+        </nav>
+        <h1>Consultancy Services</h1>
+        <p>Professional guidance for every stage of your farming journey.</p>
+    </div>
+</div>
+
+<div class="container" style="padding-bottom:60px;">
+    <div class="section-header reveal" style="margin-top:40px;">
+        <span class="section-label">Our Services</span>
+        <h2 class="section-title" style="font-size:1.8rem;">Expert Farm Consultancy</h2>
+        <p class="section-subtitle">From farm setup to business planning, our experts walk with you every step of the way.</p>
+    </div>
+
+    <div class="row g-4">
+        {% for service in services %}
+        <div class="col-md-6 col-lg-4 reveal reveal-delay-{{ forloop.counter }}">
+            <div class="glass-card h-100">
+                <div class="card-icon">
+                    {% if service.icon %}
+                    <i class="bi bi-{{ service.icon }}"></i>
+                    {% else %}
+                    <i class="bi bi-clipboard2-pulse"></i>
+                    {% endif %}
+                </div>
+                <h4 style="font-family:var(--font-heading);font-weight:700;font-size:1.15rem;margin-bottom:10px;">
+                    {{ service.name }}
+                </h4>
+                <p style="color:var(--fp-text-muted);font-size:0.92rem;line-height:1.7;margin-bottom:20px;">
+                    {{ service.description|truncatewords:25 }}
+                </p>
+
+                {% if service.includes %}
+                <ul style="list-style:none;padding:0;margin-bottom:20px;">
+                    {% for item in service.includes %}
+                    <li style="padding:5px 0;font-size:0.85rem;display:flex;gap:8px;">
+                        <i class="bi bi-check-circle" style="color:var(--fp-green);flex-shrink:0;margin-top:3px;"></i>
+                        <span>{{ item }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+
+                <div class="d-flex align-items-center justify-content-between mt-auto">
+                    {% if service.price %}
+                    <span style="font-family:var(--font-heading);font-weight:700;color:var(--fp-gold);font-size:1.1rem;">
+                        KES {{ service.price }}
+                    </span>
+                    {% else %}
+                    <span style="font-weight:600;color:var(--fp-green);font-size:0.9rem;">Contact for pricing</span>
+                    {% endif %}
+                    <a href="{% url 'consultancy:service_detail' pk=service.pk %}" class="btn btn-primary btn-sm">
+                        Learn More <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="empty-state">
+                <div class="empty-state-icon"><i class="bi bi-clipboard2-pulse"></i></div>
+                <h3>Services coming soon</h3>
+                <p>We are preparing our consultancy offerings. Contact us in the meantime.</p>
+                <a href="{% url 'contact:contact' %}" class="btn btn-primary">
+                    <i class="bi bi-chat-dots me-2"></i>Contact Us
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="glass-card mt-5 reveal" style="background:linear-gradient(135deg,var(--fp-green),var(--fp-green-light));color:white;text-align:center;">
+        <div style="position:relative;z-index:1;">
+            <h3 style="font-family:var(--font-heading);font-weight:800;margin-bottom:12px;">
+                Need a Custom Consultation?
+            </h3>
+            <p style="opacity:0.85;max-width:500px;margin:0 auto 24px;">
+                Every farm is unique. Contact us to discuss your specific needs and we'll tailor a solution for you.
+            </p>
+            <a href="{% url 'contact:contact' %}" class="btn btn-gold">
+                <i class="bi bi-envelope me-2"></i>Get in Touch
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

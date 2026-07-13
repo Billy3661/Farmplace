@@ -1,0 +1,223 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="dashboard-layout">
+        <aside class="dashboard-sidebar d-none d-lg-block">
+            <div style="padding:0 24px 20px;border-bottom:1px solid rgba(0,0,0,0.06);">
+                <div class="d-flex align-items-center gap-3">
+                    <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--fp-green),var(--fp-gold));display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:1.1rem;">
+                        {{ user.first_name.0|default:user.username.0|upper }}
+                    </div>
+                    <div>
+                        <div style="font-family:var(--font-heading);font-weight:700;font-size:0.95rem;">{{ user.get_full_name|default:user.username }}</div>
+                        <small style="color:var(--fp-text-muted);">{{ user.email }}</small>
+                    </div>
+                </div>
+            </div>
+            <nav class="mt-3">
+                <a href="{% url 'dashboard:home' %}" class="dashboard-nav-link active">
+                    <i class="bi bi-speedometer2"></i>Dashboard
+                </a>
+                <a href="{% url 'dashboard:courses' %}" class="dashboard-nav-link">
+                    <i class="bi bi-mortarboard"></i>My Courses
+                </a>
+                <a href="{% url 'dashboard:ebooks' %}" class="dashboard-nav-link">
+                    <i class="bi bi-book"></i>My eBooks
+                </a>
+                <a href="{% url 'dashboard:orders' %}" class="dashboard-nav-link">
+                    <i class="bi bi-cart"></i>Chick Orders
+                </a>
+                <a href="{% url 'dashboard:payments' %}" class="dashboard-nav-link">
+                    <i class="bi bi-credit-card"></i>Payments
+                </a>
+                <a href="{% url 'accounts:profile' %}" class="dashboard-nav-link">
+                    <i class="bi bi-person"></i>Profile
+                </a>
+                {% if membership and membership.is_active %}
+                <a href="{% url 'membership:status' %}" class="dashboard-nav-link">
+                    <i class="bi bi-star-fill" style="color:var(--fp-gold);"></i>Membership
+                </a>
+                {% endif %}
+            </nav>
+        </aside>
+
+        <div class="dashboard-content">
+            <div class="dashboard-welcome">
+                <div class="position-relative" style="z-index:1;">
+                    <h2>Welcome back, {{ user.first_name|default:user.username }}!</h2>
+                    <p>
+                        {% if membership and membership.is_active %}
+                        You have an active {{ membership.plan.name }} membership. Keep learning!
+                        {% else %}
+                        Continue your farming journey. Here's your overview.
+                        {% endif %}
+                    </p>
+                    <div class="d-flex gap-2 mt-3 flex-wrap">
+                        <a href="{% url 'courses:course_list' %}" class="btn btn-gold btn-sm">
+                            <i class="bi bi-play-circle me-1"></i>Browse Courses
+                        </a>
+                        <a href="{% url 'ebooks:ebook_list' %}" class="btn btn-outline-light btn-sm">
+                            <i class="bi bi-book me-1"></i>eBooks
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-stats">
+                <div class="dashboard-stat-card">
+                    <div class="dashboard-stat-icon green"><i class="bi bi-mortarboard"></i></div>
+                    <div>
+                        <div class="dashboard-stat-value">{{ stats.total_courses }}</div>
+                        <div class="dashboard-stat-label">Enrolled Courses</div>
+                    </div>
+                </div>
+                <div class="dashboard-stat-card">
+                    <div class="dashboard-stat-icon gold"><i class="bi bi-book"></i></div>
+                    <div>
+                        <div class="dashboard-stat-value">{{ stats.total_ebooks }}</div>
+                        <div class="dashboard-stat-label">eBooks Owned</div>
+                    </div>
+                </div>
+                <div class="dashboard-stat-card">
+                    <div class="dashboard-stat-icon orange"><i class="bi bi-cart"></i></div>
+                    <div>
+                        <div class="dashboard-stat-value">{{ stats.total_orders }}</div>
+                        <div class="dashboard-stat-label">Chick Orders</div>
+                    </div>
+                </div>
+                {% if membership and membership.is_active %}
+                <div class="dashboard-stat-card">
+                    <div class="dashboard-stat-icon green"><i class="bi bi-calendar-check"></i></div>
+                    <div>
+                        <div class="dashboard-stat-value">{{ stats.membership_days }}</div>
+                        <div class="dashboard-stat-label">Membership Days Left</div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="glass-card mb-4 reveal">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <h5 style="font-family:var(--font-heading);font-weight:700;margin:0;">
+                        <i class="bi bi-lightning-charge me-2" style="color:var(--fp-gold);"></i>Quick Actions
+                    </h5>
+                </div>
+                <div class="row g-3">
+                    <div class="col-6 col-md-3">
+                        <a href="{% url 'courses:course_list' %}" class="d-block text-center text-decoration-none" style="padding:20px;border-radius:12px;border:1px solid rgba(0,0,0,0.06);transition:var(--transition);">
+                            <div style="font-size:1.8rem;margin-bottom:8px;">📚</div>
+                            <div style="font-weight:600;font-size:0.88rem;color:var(--fp-text);">Browse Courses</div>
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <a href="{% url 'ebooks:ebook_list' %}" class="d-block text-center text-decoration-none" style="padding:20px;border-radius:12px;border:1px solid rgba(0,0,0,0.06);transition:var(--transition);">
+                            <div style="font-size:1.8rem;margin-bottom:8px;">📖</div>
+                            <div style="font-weight:600;font-size:0.88rem;color:var(--fp-text);">eBook Store</div>
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <a href="{% url 'chicks:catalog' %}" class="d-block text-center text-decoration-none" style="padding:20px;border-radius:12px;border:1px solid rgba(0,0,0,0.06);transition:var(--transition);">
+                            <div style="font-size:1.8rem;margin-bottom:8px;">&#128037;</div>
+                            <div style="font-weight:600;font-size:0.88rem;color:var(--fp-text);">Order Chicks</div>
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <a href="{% url 'consultancy:list' %}" class="d-block text-center text-decoration-none" style="padding:20px;border-radius:12px;border:1px solid rgba(0,0,0,0.06);transition:var(--transition);">
+                            <div style="font-size:1.8rem;margin-bottom:8px;">🤝</div>
+                            <div style="font-weight:600;font-size:0.88rem;color:var(--fp-text);">Consultancy</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            {% if enrollments %}
+            <div class="glass-card mb-4 reveal">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <h5 style="font-family:var(--font-heading);font-weight:700;margin:0;">
+                        <i class="bi bi-mortarboard me-2" style="color:var(--fp-green);"></i>My Courses
+                    </h5>
+                    <a href="{% url 'dashboard:courses' %}" style="font-size:0.88rem;font-weight:600;">View All <i class="bi bi-arrow-right"></i></a>
+                </div>
+                {% for enrollment in enrollments %}
+                <div class="d-flex align-items-center gap-3" style="padding:14px 0;{% if not forloop.last %}border-bottom:1px solid rgba(0,0,0,0.04);{% endif %}">
+                    <div style="width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,var(--fp-green),var(--fp-green-light));display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <i class="bi bi-mortarboard" style="color:white;"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <div style="font-family:var(--font-heading);font-weight:600;font-size:0.92rem;">
+                            <a href="{% url 'courses:course_learn' slug=enrollment.course.slug %}" style="color:var(--fp-text);">{{ enrollment.course.title }}</a>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 mt-1">
+                            <div class="progress flex-grow-1" style="height:6px;border-radius:3px;">
+                                <div class="progress-bar" style="width:{{ enrollment.progress }}%;background:var(--fp-green);"></div>
+                            </div>
+                            <small style="color:var(--fp-text-muted);white-space:nowrap;">{{ enrollment.progress }}%</small>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if recent_payments %}
+            <div class="glass-card mb-4 reveal">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <h5 style="font-family:var(--font-heading);font-weight:700;margin:0;">
+                        <i class="bi bi-credit-card me-2" style="color:var(--fp-gold);"></i>Recent Payments
+                    </h5>
+                    <a href="{% url 'dashboard:payments' %}" style="font-size:0.88rem;font-weight:600;">View All <i class="bi bi-arrow-right"></i></a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for payment in recent_payments %}
+                            <tr>
+                                <td>{{ payment.created_at|date:"d M Y" }}</td>
+                                <td>{{ payment.description|default:payment.purpose }}</td>
+                                <td style="font-weight:700;">KES {{ payment.amount }}</td>
+                                <td>
+                                    <span class="badge-course {% if payment.status == 'completed' %}status-active{% elif payment.status == 'pending' %}status-pending{% else %}status-cancelled{% endif %}">
+                                        {{ payment.get_status_display }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if not enrollments and not recent_payments %}
+            <div class="glass-card text-center py-5 reveal">
+                <div style="font-size:4rem;margin-bottom:16px;">🌱</div>
+                <h4 style="font-family:var(--font-heading);">Your Journey Starts Here</h4>
+                <p style="color:var(--fp-text-muted);max-width:400px;margin:12px auto 24px;">
+                    You haven't enrolled in any courses yet. Browse our catalog to get started!
+                </p>
+                <div class="d-flex gap-3 justify-content-center flex-wrap">
+                    <a href="{% url 'courses:course_list' %}" class="btn btn-primary">
+                        <i class="bi bi-play-circle me-2"></i>Start Learning
+                    </a>
+                    <a href="{% url 'ebooks:ebook_list' %}" class="btn btn-outline-primary">
+                        <i class="bi bi-book me-2"></i>Browse eBooks
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

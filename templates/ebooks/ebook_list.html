@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}eBook Store{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container page-header-content">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item active">eBooks</li>
+            </ol>
+        </nav>
+        <h1>eBook Store</h1>
+        <p>Practical farming guides you can read anywhere, anytime.</p>
+    </div>
+</div>
+
+<div class="container" style="padding-bottom:60px;">
+    {% if featured_ebooks %}
+    <div class="section-header reveal" style="margin-top:40px;">
+        <span class="section-label">Featured Reads</span>
+        <h2 class="section-title" style="font-size:1.8rem;">Editor's Picks</h2>
+    </div>
+    <div class="row g-4 mb-5">
+        {% for ebook in featured_ebooks %}
+        <div class="col-md-6 col-lg-3 reveal reveal-delay-{{ forloop.counter }}">
+            <div class="course-card">
+                <div class="course-card-image" style="background:linear-gradient(135deg,var(--fp-gold),var(--fp-orange));height:180px;">
+                    {% if ebook.cover_image %}
+                    <img src="{{ ebook.cover_image.url }}" alt="{{ ebook.title }}">
+                    {% else %}
+                    <div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:3rem;color:rgba(255,255,255,0.3);">
+                        <i class="bi bi-book"></i>
+                    </div>
+                    {% endif %}
+                    <span class="course-card-badge" style="background:var(--fp-orange);">Featured</span>
+                    <span class="course-card-price">KES {{ ebook.price }}</span>
+                </div>
+                <div class="course-card-body">
+                    <span class="course-card-category">{{ ebook.category.name }}</span>
+                    <h3 class="course-card-title">
+                        <a href="{{ ebook.get_absolute_url }}">{{ ebook.title }}</a>
+                    </h3>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="filter-bar reveal">
+        <form method="get" class="d-flex gap-3 flex-wrap align-items-center">
+            <div class="flex-grow-1">
+                <input type="text" name="q" class="form-control" placeholder="Search eBooks..." value="{{ search_query }}">
+            </div>
+            <select name="category" class="form-control" style="width:auto;" onchange="this.form.submit()">
+                <option value="">All Categories</option>
+                {% for cat in categories %}
+                <option value="{{ cat.slug }}" {% if selected_category == cat.slug %}selected{% endif %}>
+                    {{ cat.name }}
+                </option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
+        </form>
+    </div>
+
+    <div class="row g-4">
+        {% for ebook in ebooks %}
+        <div class="col-md-6 col-lg-3 reveal reveal-delay-{{ forloop.counter }}">
+            <div class="course-card">
+                <div class="course-card-image" style="background:linear-gradient(135deg,var(--fp-green),var(--fp-green-light));height:200px;">
+                    {% if ebook.cover_image %}
+                    <img src="{{ ebook.cover_image.url }}" alt="{{ ebook.title }}">
+                    {% else %}
+                    <div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:3rem;color:rgba(255,255,255,0.3);">
+                        <i class="bi bi-book"></i>
+                    </div>
+                    {% endif %}
+                    {% if ebook.is_featured %}
+                    <span class="course-card-badge">Featured</span>
+                    {% endif %}
+                    <span class="course-card-price">KES {{ ebook.price }}</span>
+                </div>
+                <div class="course-card-body">
+                    <span class="course-card-category">{{ ebook.category.name }}</span>
+                    <h3 class="course-card-title">
+                        <a href="{{ ebook.get_absolute_url }}">{{ ebook.title }}</a>
+                    </h3>
+                    <p class="card-text" style="font-size:0.85rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">
+                        {{ ebook.description|truncatewords:15 }}
+                    </p>
+                    <div class="course-card-meta">
+                        <span><i class="bi bi-file-earmark-pdf"></i>{{ ebook.page_count|default:"PDF" }} pages</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="empty-state">
+                <div class="empty-state-icon"><i class="bi bi-book"></i></div>
+                <h3>No eBooks found</h3>
+                <p>Try adjusting your search or filter criteria.</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ ebook.title }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container page-header-content">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'ebooks:ebook_list' %}">eBooks</a></li>
+                <li class="breadcrumb-item active">{{ ebook.title }}</li>
+            </ol>
+        </nav>
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <span class="badge-course badge-gold mb-2">{{ ebook.category.name }}</span>
+                <h1 style="font-size:2rem;">{{ ebook.title }}</h1>
+                <p>{{ ebook.short_description|default:ebook.description|truncatewords:30 }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container" style="padding-bottom:60px;">
+    <div class="row g-5" style="margin-top:30px;">
+        <div class="col-lg-8">
+            <div class="glass-card mb-4 reveal">
+                {% if ebook.cover_image %}
+                <img src="{{ ebook.cover_image.url }}" alt="{{ ebook.title }}" class="rounded mb-4" style="width:100%;max-height:400px;object-fit:cover;">
+                {% else %}
+                <div class="rounded mb-4 text-center py-5" style="background:linear-gradient(135deg,var(--fp-green-50),var(--fp-gold-50));">
+                    <i class="bi bi-book" style="font-size:5rem;color:var(--fp-green-200);"></i>
+                </div>
+                {% endif %}
+
+                <h4 style="font-weight:700;margin-bottom:16px;">About This eBook</h4>
+                <div style="color:var(--fp-text-muted);line-height:1.9;">
+                    {{ ebook.description|safe }}
+                </div>
+            </div>
+
+            {% if ebook.topics %}
+            <div class="glass-card mb-4 reveal">
+                <h4 style="font-weight:700;margin-bottom:16px;">What You'll Learn</h4>
+                <div style="color:var(--fp-text-muted);line-height:1.9;">
+                    {{ ebook.topics|safe }}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if related_ebooks %}
+            <div class="glass-card reveal">
+                <h4 style="font-weight:700;margin-bottom:20px;">Related eBooks</h4>
+                <div class="row g-3">
+                    {% for related in related_ebooks %}
+                    <div class="col-md-6">
+                        <a href="{{ related.get_absolute_url }}" class="d-flex gap-3 text-decoration-none" style="padding:12px;border-radius:12px;border:1px solid rgba(0,0,0,0.06);transition:var(--transition);">
+                            {% if related.cover_image %}
+                            <img src="{{ related.cover_image.url }}" alt="{{ related.title }}" style="width:60px;height:80px;object-fit:cover;border-radius:8px;">
+                            {% else %}
+                            <div style="width:60px;height:80px;background:var(--fp-green-50);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                <i class="bi bi-book" style="color:var(--fp-green);"></i>
+                            </div>
+                            {% endif %}
+                            <div>
+                                <h6 style="font-family:var(--font-heading);font-weight:700;font-size:0.9rem;color:var(--fp-dark);margin-bottom:4px;">{{ related.title }}</h6>
+                                <small style="color:var(--fp-green);font-weight:600;">KES {{ related.price }}</small>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-4">
+            <div class="glass-card" style="position:sticky;top:100px;">
+                <div style="text-align:center;margin-bottom:20px;">
+                    {% if ebook.has_discount %}
+                    <span style="text-decoration:line-through;color:var(--fp-text-muted);font-size:1.1rem;">KES {{ ebook.original_price }}</span>
+                    {% endif %}
+                    <span style="font-family:var(--font-heading);font-weight:900;font-size:2.2rem;color:var(--fp-green);">KES {{ ebook.price }}</span>
+                </div>
+
+                {% if has_purchased %}
+                <a href="{% url 'ebooks:ebook_download' slug=ebook.slug %}" class="btn btn-primary w-100 mb-2">
+                    <i class="bi bi-download me-2"></i>Download eBook
+                </a>
+                <div class="text-center">
+                    <small style="color:var(--fp-green);font-weight:600;">
+                        <i class="bi bi-check-circle me-1"></i>You own this eBook
+                    </small>
+                </div>
+                {% else %}
+                <form method="post" action="{% url 'ebooks:purchase_ebook' slug=ebook.slug %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-gold w-100 mb-2">
+                        <i class="bi bi-cart-plus me-2"></i>Purchase eBook
+                    </button>
+                </form>
+                {% endif %}
+
+                <ul style="list-style:none;padding:0;margin-top:24px;">
+                    <li style="padding:10px 0;border-bottom:1px solid rgba(0,0,0,0.04);display:flex;gap:10px;font-size:0.9rem;">
+                        <i class="bi bi-check-circle" style="color:var(--fp-green);"></i>Instant Download
+                    </li>
+                    <li style="padding:10px 0;border-bottom:1px solid rgba(0,0,0,0.04);display:flex;gap:10px;font-size:0.9rem;">
+                        <i class="bi bi-check-circle" style="color:var(--fp-green);"></i>PDF Format
+                    </li>
+                    <li style="padding:10px 0;border-bottom:1px solid rgba(0,0,0,0.04);display:flex;gap:10px;font-size:0.9rem;">
+                        <i class="bi bi-check-circle" style="color:var(--fp-green);"></i>Practical Content
+                    </li>
+                    <li style="padding:10px 0;border-bottom:1px solid rgba(0,0,0,0.04);display:flex;gap:10px;font-size:0.9rem;">
+                        <i class="bi bi-check-circle" style="color:var(--fp-green);"></i>Step-by-Step Guides
+                    </li>
+                    <li style="padding:10px 0;display:flex;gap:10px;font-size:0.9rem;">
+                        <i class="bi bi-check-circle" style="color:var(--fp-green);"></i>Lifetime Access
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

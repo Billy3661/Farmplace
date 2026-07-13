@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2D5016"/>
+      <stop offset="100%" style="stop-color:#1E3A0E"/>
+    </linearGradient>
+    <linearGradient id="leafM" x1="0%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" style="stop-color:#5AA830"/>
+      <stop offset="100%" style="stop-color:#3A7A1A"/>
+    </linearGradient>
+    <linearGradient id="leafL" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" style="stop-color:#7BC250"/>
+      <stop offset="100%" style="stop-color:#5AA830"/>
+    </linearGradient>
+    <linearGradient id="stem" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#3A6B1E"/>
+      <stop offset="50%" style="stop-color:#4A8025"/>
+      <stop offset="100%" style="stop-color:#3A6B1E"/>
+    </linearGradient>
+  </defs>
+
+  <circle cx="32" cy="32" r="30" fill="url(#bg)" stroke="#D4A017" stroke-width="1.5"/>
+
+  <!-- Stem -->
+  <path d="M32,52 Q31,42 32,28" stroke="url(#stem)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+  <!-- Left leaf -->
+  <path d="M32,38 C26,34 18,30 14,34 C16,38 24,40 32,38Z" fill="url(#leafM)" opacity="0.95"/>
+
+  <!-- Right leaf -->
+  <path d="M32,32 C38,26 46,22 50,26 C48,30 40,34 32,32Z" fill="url(#leafL)" opacity="0.9"/>
+
+  <!-- Top sprout -->
+  <path d="M32,28 C29,20 27,14 29,12 C31,14 32,20 32,28Z" fill="#6BC240" opacity="0.9"/>
+  <path d="M32,28 C35,20 37,14 35,12 C33,14 32,20 32,28Z" fill="#5AA830" opacity="0.85"/>
+
+  <!-- FP text -->
+  <text x="32" y="60" font-family="Poppins, Arial, sans-serif" font-weight="800" font-size="8" fill="#D4A017" text-anchor="middle" letter-spacing="2">FP</text>
+</svg>

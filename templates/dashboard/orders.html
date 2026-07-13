@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Chick Orders{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="dashboard-layout">
+        <aside class="dashboard-sidebar d-none d-lg-block">
+            <div style="padding:0 24px 20px;border-bottom:1px solid rgba(0,0,0,0.06);">
+                <div class="d-flex align-items-center gap-3">
+                    <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--fp-green),var(--fp-gold));display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:1.1rem;">
+                        {{ user.first_name.0|default:user.username.0|upper }}
+                    </div>
+                    <div>
+                        <div style="font-family:var(--font-heading);font-weight:700;font-size:0.95rem;">{{ user.get_full_name|default:user.username }}</div>
+                        <small style="color:var(--fp-text-muted);">{{ user.email }}</small>
+                    </div>
+                </div>
+            </div>
+            <nav class="mt-3">
+                <a href="{% url 'dashboard:home' %}" class="dashboard-nav-link"><i class="bi bi-speedometer2"></i>Dashboard</a>
+                <a href="{% url 'dashboard:courses' %}" class="dashboard-nav-link"><i class="bi bi-mortarboard"></i>My Courses</a>
+                <a href="{% url 'dashboard:ebooks' %}" class="dashboard-nav-link"><i class="bi bi-book"></i>My eBooks</a>
+                <a href="{% url 'dashboard:orders' %}" class="dashboard-nav-link active"><i class="bi bi-cart"></i>Chick Orders</a>
+                <a href="{% url 'dashboard:payments' %}" class="dashboard-nav-link"><i class="bi bi-credit-card"></i>Payments</a>
+                <a href="{% url 'accounts:profile' %}" class="dashboard-nav-link"><i class="bi bi-person"></i>Profile</a>
+            </nav>
+        </aside>
+
+        <div class="dashboard-content">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <h4 style="font-family:var(--font-heading);font-weight:700;margin:0;">
+                    <i class="bi bi-cart me-2" style="color:var(--fp-orange);"></i>Chick Orders
+                </h4>
+                <a href="{% url 'chicks:catalog' %}" class="btn btn-primary btn-sm">
+                    <i class="bi bi-plus me-1"></i>Order Chicks
+                </a>
+            </div>
+
+            {% for order in orders %}
+            <div class="glass-card mb-3">
+                <div class="d-flex align-items-center gap-3">
+                    <div style="width:60px;height:60px;border-radius:12px;background:linear-gradient(135deg,var(--fp-orange),var(--fp-orange-light));display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <span style="font-size:1.6rem;">&#128037;</span>
+                    </div>
+                    <div class="flex-grow-1">
+                        <div style="font-family:var(--font-heading);font-weight:700;font-size:1rem;">
+                            Order #{{ order.id }} — {{ order.chick_breed }} ({{ order.chick_age }})
+                        </div>
+                        <small style="color:var(--fp-text-muted);">
+                            {{ order.quantity }} birds &middot; KES {{ order.total_price }} &middot; {{ order.created_at|date:"d M Y" }}
+                        </small>
+                    </div>
+                    <span class="badge-course {% if order.status == 'confirmed' %}status-active{% elif order.status == 'pending' %}status-pending{% elif order.status == 'cancelled' %}status-cancelled{% else %}status-completed{% endif %}">
+                        {{ order.get_status_display }}
+                    </span>
+                </div>
+            </div>
+            {% empty %}
+            <div class="glass-card text-center py-5">
+                <div style="font-size:4rem;margin-bottom:16px;">&#128037;</div>
+                <h4 style="font-family:var(--font-heading);">No Orders Yet</h4>
+                <p style="color:var(--fp-text-muted);max-width:400px;margin:12px auto 24px;">
+                    You haven't ordered any chicks yet. Visit our catalog to place your first order!
+                </p>
+                <a href="{% url 'chicks:catalog' %}" class="btn btn-primary">
+                    <i class="bi bi-cart me-2"></i>Order Chicks
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

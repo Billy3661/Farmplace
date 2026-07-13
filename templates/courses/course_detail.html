@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ course.title }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container page-header-content">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'courses:course_list' %}">Courses</a></li>
+                <li class="breadcrumb-item active">{{ course.title }}</li>
+            </ol>
+        </nav>
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <span class="badge-course badge-green mb-2">{{ course.category.name }}</span>
+                <h1>{{ course.title }}</h1>
+                <p>{{ course.short_description|default:course.description|truncatewords:30 }}</p>
+                <div class="d-flex gap-4 flex-wrap" style="margin-top:16px;">
+                    <span style="color:rgba(255,255,255,0.8);"><i class="bi bi-clock me-1"></i>{{ course.duration|default:"4 weeks" }}</span>
+                    <span style="color:rgba(255,255,255,0.8);"><i class="bi bi-bar-chart me-1"></i>{{ course.get_level_display }}</span>
+                    <span style="color:rgba(255,255,255,0.8);"><i class="bi bi-people me-1"></i>{{ course.enrollment_count }} enrolled</span>
+                    <span style="color:rgba(255,255,255,0.8);"><i class="bi bi-collection me-1"></i>{{ course.module_count }} modules</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container" style="padding-bottom:60px;">
+    <div class="row g-5" style="margin-top:30px;">
+        <div class="col-lg-8">
+            <div class="glass-card mb-4">
+                <h4 style="font-weight:700;margin-bottom:16px;">About This Course</h4>
+                <p style="color:var(--fp-text-muted);line-height:1.8;">{{ course.description }}</p>
+            </div>
+
+            <div class="glass-card">
+                <h4 style="font-weight:700;margin-bottom:20px;">Course Content</h4>
+                {% for module in modules %}
+                <div style="border:1px solid rgba(0,0,0,0.06);border-radius:12px;margin-bottom:12px;overflow:hidden;">
+                    <div class="module-header" style="background:var(--fp-green-50);">
+                        <span>{{ module.title }}</span>
+                        <span style="color:var(--fp-text-muted);font-size:0.85rem;">{{ module.lesson_count }} lessons</span>
+                    </div>
+                    {% for lesson in module.lessons.all %}
+                    <div class="lesson-item">
+                        <i class="bi bi-play-circle" style="color:var(--fp-green);"></i>
+                        <span>{{ lesson.title }}</span>
+                        {% if lesson.duration %}
+                        <span style="margin-left:auto;color:var(--fp-text-muted);font-size:0.82rem;">{{ lesson.duration }}</span>
+                        {% endif %}
+                        {% if lesson.is_free %}
+                        <span class="badge-course badge-green" style="font-size:0.7rem;">Free</span>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="glass-card" style="position:sticky;top:100px;">
+                {% if course.image %}
+                <img src="{{ course.image.url }}" alt="{{ course.title }}" class="rounded mb-3" style="width:100%;height:200px;object-fit:cover;">
+                {% endif %}
+
+                <div style="text-align:center;margin-bottom:20px;">
+                    {% if course.has_discount %}
+                    <span style="text-decoration:line-through;color:var(--fp-text-muted);font-size:1.1rem;">KES {{ course.original_price }}</span>
+                    {% endif %}
+                    <span style="font-family:var(--font-heading);font-weight:900;font-size:2rem;color:var(--fp-green);">KES {{ course.price }}</span>
+                </div>
+
+                {% if enrollment %}
+                <a href="{% url 'courses:course_learn' slug=course.slug %}" class="btn btn-primary w-100 mb-2">
+                    <i class="bi bi-play-fill me-2"></i>Continue Learning
+                </a>
+                <div class="progress" style="height:8px;border-radius:4px;">
+                    <div class="progress-bar" style="width:{{ enrollment.progress }}%;background:var(--fp-green);"></div>
+                </div>
+                <small style="color:var(--fp-text-muted);">{{ enrollment.progress }}% complete</small>
+                {% else %}
+                <form method="post" action="{% url 'courses:enroll_course' slug=course.slug %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-gold w-100 mb-2">
+                        <i class="bi bi-cart-plus me-2"></i>Enroll Now
+                    </button>
+                </form>
+                {% endif %}
+
+                <ul style="list-style:none;padding:0;margin-top:20px;">
+                    <li style="padding:10px 0;border-bottom:1px solid rgba(0,0,0,0.04);display:flex;gap:10px;font-size:0.9rem;">
+                        <i class="bi bi-check-circle" style="color:var(--fp-green);"></i> {{ course.module_count }} Modules
+                    </li>
+                    <li style="padding:10px 0;border-bottom:1px solid rgba(0,0,0,0.04);display:flex;gap:10px;font-size:0.9rem;">
+                        <i class="bi bi-check-circle" style="color:var(--fp-green);"></i> {{ course.lesson_count }} Lessons
+                    </li>
+                    <li style="padding:10px 0;border-bottom:1px solid rgba(0,0,0,0.04);display:flex;gap:10px;font-size:0.9rem;">
+                        <i class="bi bi-check-circle" style="color:var(--fp-green);"></i> Notes & Posters
+                    </li>
+                    <li style="padding:10px 0;border-bottom:1px solid rgba(0,0,0,0.04);display:flex;gap:10px;font-size:0.9rem;">
+                        <i class="bi bi-check-circle" style="color:var(--fp-green);"></i> WhatsApp Discussions
+                    </li>
+                    <li style="padding:10px 0;border-bottom:1px solid rgba(0,0,0,0.04);display:flex;gap:10px;font-size:0.9rem;">
+                        <i class="bi bi-check-circle" style="color:var(--fp-green);"></i> Practical Assignments
+                    </li>
+                    <li style="padding:10px 0;display:flex;gap:10px;font-size:0.9rem;">
+                        <i class="bi bi-check-circle" style="color:var(--fp-green);"></i> Certificate
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
